@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Groceries Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo" />
+      <h2>Menu</h2>
+      <ul>
+        <li><a href="#">Deals</a></li>
+        <li><a href="#">History</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="topbar">
+        <h1>Groceries Dashboard</h1>
+      </header>
+
+      <!-- Shopping List -->
+      <section class="items-section">
+        <h2>Your Shopping List</h2>
+        {% if shopping_items %}
+        <form action="/remove_items" method="post">
+          <div class="checkbox-grid">
+            {% for item in shopping_items %}
+              {% set item_id = 'item_' ~ loop.index %}
+              <div class="checkbox-item">
+                <input type="checkbox" id="{{ item_id }}" name="remove_items" value="{{ item }}">
+                <label for="{{ item_id }}">{{ item }}</label>
+              </div>
+            {% endfor %}
+          </div>
+          <button type="submit" class="remove-btn">Remove Items</button>
+        </form>
+        {% else %}
+          <p>No items in your shopping list.</p>
+        {% endif %}
+      </section>
+
+      <!-- Add Items Section -->
+      <section class="add-section">
+        <h3>Add Items</h3>
+        {% if all_items %}
+        <form action="/add_item" method="post">
+          <select name="select_items" required>
+            {% for item in all_items %}
+              <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit" class="add-btn">Add Item</button>
+        </form>
+        {% else %}
+          <p>No items available to add.</p>
+        {% endif %}
+      </section>
+    </main>
+  </div>
+</body>
+</html>
